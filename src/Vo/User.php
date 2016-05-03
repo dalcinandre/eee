@@ -20,6 +20,10 @@ class User extends Vo
     public $profession;
     public $location;
     public $radius;
+
+    /**
+     * @var Photo[]
+     */
     public $photos;
 
     public function __construct()

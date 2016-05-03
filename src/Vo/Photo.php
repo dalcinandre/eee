@@ -2,12 +2,14 @@
 
 namespace Core\Vo;
 
-class Chat extends Vo
+class Photo extends Vo
 {
+    public $photo;
+
     /**
-     * @var User
+     * @var bool
      */
-    public $user;
+    public $perfil;
 
     public function __construct()
     {

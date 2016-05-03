@@ -22,7 +22,7 @@ final class Error extends \Slim\Handlers\Error
                     'code' => $ex->getCode(),
                     'file' => $ex->getFile(),
                     'line' => $ex->getLine(),
-                    'trace' => $ex->getTraceAsString(),
+                    # 'trace' => $ex->getTraceAsString(),
                   ]);
     }
 }

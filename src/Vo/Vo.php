@@ -9,20 +9,9 @@ class Vo
     public $offset;
     public $createdAt;
     public $updateAt;
+    public $status;
 
     public function __construct()
     {
     }
-
-    /*public function __toString()
-    {
-        $obj = clone $this;
-        foreach (get_object_vars($obj) as $key => $value) {
-            if (!$value) {
-                unset($obj->{$key});
-            }
-        }
-
-        return $obj;
-    }*/
 }
