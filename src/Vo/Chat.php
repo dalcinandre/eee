@@ -1,6 +1,6 @@
 <?php
 
-namespace Vo;
+namespace Core\Vo;
 
 class Chat extends Vo
 {

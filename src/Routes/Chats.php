@@ -1,11 +1,11 @@
 <?php
 
-namespace Routes;
+namespace Core\Routes;
 
+use Core\Dao\ChatsDAO;
 use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Req;
 use Psr\Http\Message\ResponseInterface as Res;
-use Dao\ChatsDAO;
 
 class Chats
 {

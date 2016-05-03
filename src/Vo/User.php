@@ -1,6 +1,6 @@
 <?php
 
-namespace Vo;
+namespace Core\Vo;
 
 class User extends Vo
 {
@@ -11,7 +11,11 @@ class User extends Vo
     public $interestFrom;
     public $interestTo;
     public $aboutMe;
-    public $congragation;
+    public $congregation;
+
+    /**
+     * @var Genre
+     */
     public $genre;
     public $profession;
     public $location;

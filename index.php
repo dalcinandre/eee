@@ -10,18 +10,18 @@ require realpath(__DIR__).'/vendor/autoload.php';
 $app = new \Slim\App();
 $c = $app->getContainer();
 $c['errorHandler'] = function ($c) {
-  return new Utils\Error();
+  return new Core\Utils\Error();
 };
 
 $app->group('/users', function () use ($app) {
-  $app->get('[/]', 'Routes\Users:get');
-  $app->put('[/]', 'Routes\Users:put');
-  $app->post('[/]', 'Routes\Users:post');
-  $app->delete('/{id}', 'Routes\Users:delete');
+  $app->get('[/]', 'Core\Routes\Users:get');
+  $app->put('[/]', 'Core\Routes\Users:put');
+  $app->post('[/]', 'Core\Routes\Users:post');
+  $app->delete('/{id}', 'Core\Routes\Users:delete');
 });
 
 $app->group('/chats', function () use ($app) {
-  $app->get('/{idUser}', 'Routes\Chats:get');
+  $app->get('/{idUser}', 'Core\Routes\Chats:get');
 });
 
 $app->get('/ex', function () {

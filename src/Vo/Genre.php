@@ -1,6 +1,6 @@
 <?php
 
-namespace Vo;
+namespace Core\Vo;
 
 class Genre extends Vo
 {

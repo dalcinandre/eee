@@ -1,6 +1,6 @@
 <?php
 
-namespace Utils;
+namespace Core\Utils;
 
 use Psr\Http\Message\ServerRequestInterface as Req;
 use Psr\Http\Message\ResponseInterface as Res;

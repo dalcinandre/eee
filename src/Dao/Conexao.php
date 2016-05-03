@@ -1,6 +1,6 @@
 <?php
 
-namespace Dao;
+namespace Core\Dao;
 
 $config = explode(DIRECTORY_SEPARATOR, __FILE__);
 $config = parse_ini_file(DIRECTORY_SEPARATOR.$config[1].DIRECTORY_SEPARATOR.$config[2].DIRECTORY_SEPARATOR.'config_eee.ini');

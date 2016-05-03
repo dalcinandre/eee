@@ -1,9 +1,10 @@
 <?php
 
-namespace Routes;
+namespace Core\Routes;
 
-use Vo\User;
-use Dao\UsersDAO;
+use Core\Vo\User;
+use Core\Dao\UsersDAO;
+use Core\Utils\Utils;
 use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Req;
 use Psr\Http\Message\ResponseInterface as Res;
@@ -43,37 +44,12 @@ class Users
     public function post(Req $req, Res $res, array $args)
     {
         try {
-            $user = new User();
-
-            $user = $this->teste($req->getParsedBody(), $user);
-
-            throw new \Exception($user);
-
-            /*
-            foreach (get_object_vars((object) $req->getParsedBody()) as $key => $value) {
-                $user->{$key} = $value;
-            }
-            */
-
-            $user = $this->dao->post($user);
+            $user = $this->dao->post(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
 
             return $res->withStatus(201)->withHeader('Location', $req->getUri().'/'.$user->id);
         } catch (\Exception $e) {
             throw $e;
         }
-    }
-
-    public function teste($t, $user)
-    {
-        foreach (get_object_vars($t) as $key => $value) {
-            if (get_object_vars($value) > 0) {
-                $this->teste($value, $user->{$key});
-            }
-
-            $user->{$key} = $value;
-        }
-
-        return $user;
     }
 
     public function delete(Req $req, Res $res, array $args)

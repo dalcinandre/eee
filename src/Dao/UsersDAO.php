@@ -1,8 +1,8 @@
 <?php
 
-namespace Dao;
+namespace Core\Dao;
 
-use Vo\User;
+use Core\Vo\User;
 
 class UsersDAO
 {
@@ -35,7 +35,7 @@ class UsersDAO
             $pst->bindParam(6, $user->interestTo);
             $pst->bindParam(7, $user->aboutMe);
             $pst->bindParam(8, $user->congregation);
-            $pst->bindParam(9, $user->genre['id']);
+            $pst->bindParam(9, $user->genre->id);
             $pst->bindParam(10, $user->profession);
             $pst->bindParam(11, $user->location);
             $pst->bindParam(12, $user->radius);

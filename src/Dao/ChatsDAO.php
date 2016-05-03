@@ -1,10 +1,10 @@
 <?php
 
-namespace Dao;
+namespace Core\Dao;
 
-use Vo\Chat;
-use Vo\User;
-use Utils\Utils;
+use Core\Vo\Chat;
+use Core\Vo\User;
+use Core\Utils\Utils;
 
 class ChatsDAO
 {

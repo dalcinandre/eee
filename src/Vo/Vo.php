@@ -1,6 +1,6 @@
 <?php
 
-namespace Vo;
+namespace Core\Vo;
 
 class Vo
 {
@@ -12,10 +12,9 @@ class Vo
 
     public function __construct()
     {
-        echo 'Vo loaded.';
     }
 
-    public function __toString()
+    /*public function __toString()
     {
         $obj = clone $this;
         foreach (get_object_vars($obj) as $key => $value) {
@@ -25,5 +24,5 @@ class Vo
         }
 
         return $obj;
-    }
+    }*/
 }
