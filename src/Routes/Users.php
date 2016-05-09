@@ -3,6 +3,7 @@
 namespace Core\Routes;
 
 use Core\Vo\User;
+use Core\Vo\Location;
 use Core\Dao\UsersDAO;
 use Core\Utils\Utils;
 use Interop\Container\ContainerInterface;
@@ -41,12 +42,38 @@ class Users
         }
     }
 
+    public function putLocation(Req $req, Res $res, array $args)
+    {
+        try {
+            $user = $this->dao->putLocation(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
+
+            return $res->withStatus(200);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
     public function post(Req $req, Res $res, array $args)
     {
         try {
             $user = $this->dao->post(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
 
-            return $res->withStatus(201)->withHeader('Location', $req->getUri().'/'.$user->id);
+            return $res->withStatus(201)->withJson($user)->withHeader('Location', $req->getUri().'/'.$user->id);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function login(Req $req, Res $res, array $args)
+    {
+        try {
+            $user = $this->dao->login(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
+
+            if ($user instanceof User) {
+                return $res->withStatus(200)->withJson(Utils::clean($user));
+            } else {
+                return $res->withStatus(401);
+            }
         } catch (\Exception $e) {
             throw $e;
         }

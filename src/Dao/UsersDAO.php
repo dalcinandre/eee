@@ -3,6 +3,8 @@
 namespace Core\Dao;
 
 use Core\Vo\User;
+use Core\Vo\Location;
+use Core\Utils\Utils;
 
 class UsersDAO
 {
@@ -10,8 +12,58 @@ class UsersDAO
     {
     }
 
-    public function get()
+    public function get(User $user)
     {
+        $con;
+        try {
+            $con = Conexao::getConexao();
+            $pst = $con->prepare(
+              'SELECT
+              	a.id_user,
+              	a.name,
+              	a.last_name,
+              	a.birthday,
+              	a.photo
+              FROM
+              	get_users(?, ?, ?, ?, ?, ?, ?) AS a;'
+            );
+
+            $pst->bindParam(1, $user->id);
+            $pst->bindParam(2, $user->interestFrom);
+            $pst->bindParam(1, $user->interestTo);
+            $pst->bindParam(2, $user->password);
+            $pst->bindParam(1, $user->username);
+            $pst->bindParam(2, $user->password);
+            $pst->bindParam(2, $user->password);
+
+            $pst->setFetchMode(\PDO::FETCH_CLASS, 'Core\Vo\User');
+            $pst->execute();
+
+            $user = $pst->fetch();
+            $pst->closeCursor();
+            unset($pst);
+
+            if (empty($user)) {
+                return;
+            }
+
+            $location = new Location();
+            $location->latitude = $user->latitude;
+            $location->longitude = $user->longitude;
+            $user->location = Utils::clean($location);
+
+            $user->latitude = $user->longitude = null;
+
+            return $user;
+        } catch (\Exception $err) {
+            if (($con instanceof \PDO) && ($con->inTransaction())) {
+                $con->rollBack();
+            }
+
+            throw $err;
+        } finally {
+            unset($con);
+        }
     }
 
     public function post(User $user)
@@ -23,9 +75,9 @@ class UsersDAO
             $pst = $con->prepare(
             'INSERT INTO users(
                         name, username, password, birthday, interest_from, interest_to,
-                        about_me, congregation, id_genre, profession, location, radius)
-                VALUES (?, ?, ?, ?, ?, ?,
-                        ?, ?, ?, ?, ?, ?);');
+                        bio, congregation, id_gender, profession, latitude, longitude, radius, last_name)
+                VALUES (?, ?, ?, ?, ?, ?, ?,
+                        ?, ?, ?, ?, ?, ?, ?);');
 
             $pst->bindParam(1, $user->name);
             $pst->bindParam(2, $user->username);
@@ -33,12 +85,14 @@ class UsersDAO
             $pst->bindParam(4, $user->birthday);
             $pst->bindParam(5, $user->interestFrom);
             $pst->bindParam(6, $user->interestTo);
-            $pst->bindParam(7, $user->aboutMe);
+            $pst->bindParam(7, $user->bio);
             $pst->bindParam(8, $user->congregation);
-            $pst->bindParam(9, $user->genre->id);
+            $pst->bindParam(9, $user->gender->id);
             $pst->bindParam(10, $user->profession);
-            $pst->bindParam(11, $user->location);
-            $pst->bindParam(12, $user->radius);
+            $pst->bindParam(11, $user->location->latitude);
+            $pst->bindParam(12, $user->location->longitude);
+            $pst->bindParam(13, $user->radius);
+            $pst->bindParam(14, $user->lastName);
             $pst->execute();
             $pst->closeCursor();
             unset($pst);
@@ -63,7 +117,7 @@ class UsersDAO
 
             $con->commit();
 
-            return $user;
+            return Utils::mapper($user);
         } catch (\Exception $err) {
             if (($con instanceof \PDO) && ($con->inTransaction())) {
                 $con->rollBack();
@@ -89,12 +143,14 @@ class UsersDAO
                 birthday=?,
                 interest_from=?,
                 interest_to=?,
-                about_me=?,
+                bio=?,
                 congregation=?,
-                id_genre=?,
+                id_gender=?,
                 profession=?,
-                location=?,
-                radius=?
+                latitude=?,
+                longitude=?,
+                radius=?,
+                last_name=?
               WHERE
                 id_user = ?;'
             );
@@ -105,13 +161,15 @@ class UsersDAO
             $pst->bindParam(4, $user->birthday);
             $pst->bindParam(5, $user->interestFrom);
             $pst->bindParam(6, $user->interestTo);
-            $pst->bindParam(7, $user->aboutMe);
+            $pst->bindParam(7, $user->bio);
             $pst->bindParam(8, $user->congregation);
-            $pst->bindParam(9, $user->genre->id);
+            $pst->bindParam(9, $user->gender->id);
             $pst->bindParam(10, $user->profession);
-            $pst->bindParam(11, $user->location);
-            $pst->bindParam(12, $user->radius);
-            $pst->bindParam(13, $user->id, \PDO::PARAM_INT);
+            $pst->bindParam(11, $user->latitude);
+            $pst->bindParam(12, $user->longitude);
+            $pst->bindParam(13, $user->radius);
+            $pst->bindParam(14, $user->lastName);
+            $pst->bindParam(15, $user->id, \PDO::PARAM_INT);
             $pst->execute();
             $pst->closeCursor();
             unset($pst);
@@ -176,6 +234,41 @@ class UsersDAO
         }
     }
 
+    public function putLocation(User $user)
+    {
+        $con;
+        try {
+            $con = Conexao::getConexao();
+            $con->beginTransaction();
+            $pst = $con->prepare(
+              'UPDATE users SET
+                latitude=?,
+                longitude=?
+              WHERE
+                id_user = ?;'
+            );
+
+            $pst->bindParam(1, $user->location->latitude);
+            $pst->bindParam(2, $user->location->longitude);
+            $pst->bindParam(3, $user->id, \PDO::PARAM_INT);
+            $pst->execute();
+            $pst->closeCursor();
+            unset($pst);
+
+            $con->commit();
+
+            return $user;
+        } catch (\Exception $err) {
+            if (($con instanceof \PDO) && ($con->inTransaction())) {
+                $con->rollBack();
+            }
+
+            throw $err;
+        } finally {
+            unset($con);
+        }
+    }
+
     public function delete($id)
     {
         $con;
@@ -190,6 +283,63 @@ class UsersDAO
             unset($pst);
 
             $con->commit();
+        } catch (\Exception $err) {
+            if (($con instanceof \PDO) && ($con->inTransaction())) {
+                $con->rollBack();
+            }
+
+            throw $err;
+        } finally {
+            unset($con);
+        }
+    }
+
+    public function login(User $user)
+    {
+        $con;
+        try {
+            $con = Conexao::getConexao();
+            $pst = $con->prepare(
+              'SELECT
+              	a.name,
+              	a.username as userName,
+              	a.birthday,
+              	a.interest_from interestFrom,
+              	a.interest_to interestTo,
+              	a.bio,
+              	a.congregation,
+              	a.latitude,
+              	a.longitude,
+              	a.radius,
+              	a.last_name as lastName
+              FROM
+              	users a
+              WHERE
+              	a.username = ? AND
+              	a.password = ?'
+            );
+
+            $pst->bindParam(1, $user->username);
+            $pst->bindParam(2, $user->password);
+            $pst->setFetchMode(\PDO::FETCH_CLASS, 'Core\Vo\User');
+            $pst->execute();
+
+            $user = $pst->fetch();
+            $pst->closeCursor();
+            unset($pst);
+
+            if (empty($user)) {
+                return;
+            }
+
+            $location = new Location();
+            $location->latitude = $user->latitude;
+            $location->longitude = $user->longitude;
+            $user->location = $location;
+
+            $user->latitude = $user->longitude = null;
+
+            return Utils::mapper($user, new User());
         } catch (\Exception $err) {
             if (($con instanceof \PDO) && ($con->inTransaction())) {
                 $con->rollBack();

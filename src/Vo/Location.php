@@ -2,9 +2,10 @@
 
 namespace Core\Vo;
 
-class Genre extends Vo
+class Location extends Vo
 {
-    public $genre;
+    public $latitude;
+    public $longitude;
 
     public function __construct()
     {

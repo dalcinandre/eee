@@ -4,25 +4,70 @@ namespace Core\Vo;
 
 class User extends Vo
 {
+    /**
+     * @var string|null
+     */
     public $name;
+
+    /**
+     * @var string|null
+     */
+    public $lastName;
+
     public $username;
+
+    /**
+     * @var string|null
+     */
     public $password;
+
+    /**
+     * @var string|null
+     */
     public $birthday;
+
+    /**
+     * @var int|null
+     */
     public $interestFrom;
+
+    /**
+     * @var int|null
+     */
     public $interestTo;
-    public $aboutMe;
+
+    /**
+     * @var string|null
+     */
+    public $bio;
+
+    /**
+     * @var string|null
+     */
     public $congregation;
 
     /**
-     * @var Genre
+     * @var Gender|null
      */
-    public $genre;
+    public $gender;
+
+    /**
+     * @var string|null
+     */
     public $profession;
+
+    /**
+     * @var Location
+     */
     public $location;
+
+    /**
+     * @var int|null
+     */
     public $radius;
 
     /**
-     * @var Photo[]
+     * @var Photo[]|null
      */
     public $photos;
 

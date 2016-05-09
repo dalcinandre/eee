@@ -18,7 +18,13 @@ $app->group('/users', function () use ($app) {
   $app->put('[/]', 'Core\Routes\Users:put');
   $app->post('[/]', 'Core\Routes\Users:post');
   $app->delete('/{id}', 'Core\Routes\Users:delete');
+
+  $app->group('/location', function () use ($app) {
+    $app->put('[/]', 'Core\Routes\Users:putLocation');
+  });
 });
+
+$app->post('/login[/]', 'Core\Routes\Users:login');
 
 $app->group('/chats', function () use ($app) {
   $app->get('/{idUser}', 'Core\Routes\Chats:get');

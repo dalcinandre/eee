@@ -19,7 +19,7 @@ class ChatsDAO
             $con = Conexao::getConexao();
             $pst = $con->prepare(
               'SELECT
-              	a.id_chat, a.id_user, b.name
+              	a.id_chat, a.id_user, b.name, b.last_name
               FROM
               (
               	SELECT
@@ -57,6 +57,7 @@ class ChatsDAO
                 $user = new User();
                 $user->id = $atual['id_user'];
                 $user->name = $atual['name'];
+                $user->lastName = $atual['last_name'];
                 $chat->user = Utils::clean($user);
 
                 $chats[] = Utils::clean($chat);
