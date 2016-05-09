@@ -301,7 +301,8 @@ class UsersDAO
             $con = Conexao::getConexao();
             $pst = $con->prepare(
               'SELECT
-              	a.name,
+                a.id_user as id,
+                a.name,
               	a.username as userName,
               	a.birthday,
               	a.interest_from interestFrom,

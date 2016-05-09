@@ -70,7 +70,7 @@ class Users
             $user = $this->dao->login(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
 
             if ($user instanceof User) {
-                return $res->withStatus(200)->withJson(Utils::clean($user));
+                return $res->withStatus(200)->withJson(Utils::clean($user))->withHeader('Content-Type', 'application/json');
             } else {
                 return $res->withStatus(401);
             }
