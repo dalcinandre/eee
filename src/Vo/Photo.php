@@ -7,7 +7,7 @@ class Photo extends Vo
     public $photo;
 
     /**
-     * @var bool
+     * @var bool|null
      */
     public $perfil;
 

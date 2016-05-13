@@ -23,31 +23,22 @@ class Users
 
     public function get(Req $req, Res $res, array $args)
     {
-    }
-
-    public function put(Req $req, Res $res, array $args)
-    {
         try {
-            $user = new User();
-
-            foreach (get_object_vars((object) $req->getParsedBody()) as $key => $value) {
-                $user->{$key} = $value;
-            }
-
-            $this->dao->put($user);
-
-            return $res->withStatus(200)->withJson($user);
+            return $res->withStatus(200)->withJson(
+              $this->dao->get(
+                $req->getAttribute('id'), $req->getAttribute('latitude'), $req->getAttribute('longitude'))
+              );
         } catch (\Exception $e) {
             throw $e;
         }
     }
 
-    public function putLocation(Req $req, Res $res, array $args)
+    public function put(Req $req, Res $res, array $args)
     {
         try {
-            $user = $this->dao->putLocation(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
+            $user = $this->dao->put(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
 
-            return $res->withStatus(200);
+            return $res->withStatus(200)->withJson($user);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -70,7 +61,7 @@ class Users
             $user = $this->dao->login(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
 
             if ($user instanceof User) {
-                return $res->withStatus(200)->withJson(Utils::clean($user))->withHeader('Content-Type', 'application/json');
+                return $res->withStatus(200)->withJson($user);
             } else {
                 return $res->withStatus(401);
             }
@@ -84,7 +75,7 @@ class Users
         try {
             $this->dao->delete($req->getAttribute('id'));
 
-            return $res->withStatus(200);
+            return $res->withStatus(200)->getBody()->write(200);
         } catch (\Exception $e) {
             throw $e;
         }

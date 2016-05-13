@@ -7,20 +7,27 @@ header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 
 require realpath(__DIR__).'/vendor/autoload.php';
 
-$app = new \Slim\App();
-$c = $app->getContainer();
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$c = new \Slim\Container($configuration);
+
 $c['errorHandler'] = function ($c) {
   return new Core\Utils\Error();
 };
+$app = new \Slim\App($c);
 
 $app->group('/users', function () use ($app) {
-  $app->get('[/]', 'Core\Routes\Users:get');
+  $app->get('/{id}/{latitude}/{longitude}', 'Core\Routes\Users:get');
   $app->put('[/]', 'Core\Routes\Users:put');
   $app->post('[/]', 'Core\Routes\Users:post');
   $app->delete('/{id}', 'Core\Routes\Users:delete');
 
   $app->group('/location', function () use ($app) {
-    $app->put('[/]', 'Core\Routes\Users:putLocation');
+    $app->put('[/]', 'Core\Routes\Location:put');
   });
 });
 

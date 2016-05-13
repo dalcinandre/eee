@@ -2,8 +2,8 @@
 
 namespace Core\Utils;
 
-use Psr\Http\Message\ServerRequestInterface as Req;
-use Psr\Http\Message\ResponseInterface as Res;
+use \Psr\Http\Message\ServerRequestInterface as Req;
+use \Psr\Http\Message\ResponseInterface as Res;
 
 final class Error extends \Slim\Handlers\Error
 {

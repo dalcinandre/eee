@@ -4,7 +4,6 @@ namespace Core\Dao;
 
 use Core\Vo\Chat;
 use Core\Vo\User;
-use Core\Utils\Utils;
 
 class ChatsDAO
 {
@@ -58,9 +57,9 @@ class ChatsDAO
                 $user->id = $atual['id_user'];
                 $user->name = $atual['name'];
                 $user->lastName = $atual['last_name'];
-                $chat->user = Utils::clean($user);
+                $chat->user = $user;
 
-                $chats[] = Utils::clean($chat);
+                $chats[] = $chat;
             }
 
             return $chats;
