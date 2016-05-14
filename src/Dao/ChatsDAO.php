@@ -69,4 +69,40 @@ class ChatsDAO
             unset($con);
         }
     }
+
+    public function delete($id, $idDislike)
+    {
+        $con;
+        try {
+            $con = Conexao::getConexao();
+            $con->beginTransaction();
+            $pst = $con->prepare(
+            'WITH deleted AS (DELETE FROM chats WHERE id_chat = ? RETURNING ? AS id_user)
+            UPDATE
+            	likes AS a
+            SET
+            	liked = false
+            FROM
+            	deleted AS b
+            WHERE
+            	a.id_user = b.id_user;'
+            );
+
+            $pst->bindParam(1, $id);
+            $pst->bindParam(2, $idDislike);
+            $pst->execute();
+            $pst->closeCursor();
+            unset($pst);
+
+            $con->commit();
+        } catch (\Exception $err) {
+            if (($con instanceof \PDO) && ($con->inTransaction())) {
+                $con->rollBack();
+            }
+
+            throw $err;
+        } finally {
+            unset($con);
+        }
+    }
 }

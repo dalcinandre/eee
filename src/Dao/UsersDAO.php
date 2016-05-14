@@ -45,9 +45,8 @@ class UsersDAO
 
             $isOpen = false;
             foreach ($users as $user) {
-
                 if (!$pst instanceof \PDOStatement) {
-                  $pst = $con->prepare('SELECT a.id_photo, a.photo, a.perfil FROM users_photos AS a WHERE a.id_user = ?');
+                    $pst = $con->prepare('SELECT a.id_photo, a.photo, a.perfil FROM users_photos AS a WHERE a.id_user = ?');
                 }
 
                 $pst->bindParam(1, $user->id);
@@ -57,7 +56,9 @@ class UsersDAO
                 $user->photos = $pst->fetchAll();
             }
 
-            if ($isOpen) $pst->closeCursor();
+            if ($isOpen) {
+                $pst->closeCursor();
+            }
 
             unset($pst);
 

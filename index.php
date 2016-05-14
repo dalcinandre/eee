@@ -26,6 +26,11 @@ $app->group('/users', function () use ($app) {
   $app->post('[/]', 'Core\Routes\Users:post');
   $app->delete('/{id}', 'Core\Routes\Users:delete');
 
+  $app->group('/likes', function () use ($app) {
+    $app->post('[/]', 'Core\Routes\Likes:post');
+    $app->get('/{id}[/{limit:\d+?}/{offset:\d+?}]', 'Core\Routes\Likes:get');
+  });
+
   $app->group('/location', function () use ($app) {
     $app->put('[/]', 'Core\Routes\Location:put');
   });
@@ -35,6 +40,7 @@ $app->post('/login[/]', 'Core\Routes\Users:login');
 
 $app->group('/chats', function () use ($app) {
   $app->get('/{idUser}', 'Core\Routes\Chats:get');
+  $app->delete('/{id}/{idDislike}', 'Core\Routes\Chats:delete');
 });
 
 $app->get('/ex', function () {

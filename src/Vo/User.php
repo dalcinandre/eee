@@ -14,6 +14,9 @@ class User extends Vo
      */
     public $lastName;
 
+    /**
+     * @var string|null
+     */
     public $username;
 
     /**
@@ -57,7 +60,7 @@ class User extends Vo
     public $profession;
 
     /**
-     * @var Location
+     * @var Location|null
      */
     public $location;
 

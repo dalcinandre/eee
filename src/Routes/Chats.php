@@ -26,4 +26,15 @@ class Chats
             throw $e;
         }
     }
+
+    public function delete(Req $req, Res $res, array $args)
+    {
+        try {
+            $this->dao->delete($req->getAttribute('id'), $req->getAttribute('idDislike'));
+
+            return $res->withStatus(200)->getBody()->write(200);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
 }
