@@ -4,6 +4,7 @@ namespace Core\Dao;
 
 use Core\Vo\Chat;
 use Core\Vo\User;
+use Core\Utils\Utils;
 
 class ChatsDAO
 {
@@ -53,9 +54,10 @@ class ChatsDAO
 
             $ret = $pst->fetchAll();
             $pst->closeCursor();
-            unset($pst);
-            $chats = array();
 
+            $pst = null; # aqui tem que ser null por que senao da pau la em baixo no reuso do objeto
+
+            $chats = array();
             $isOpen = false;
             foreach ($ret as $atual) {
                 $chat = new Chat();
@@ -97,10 +99,12 @@ class ChatsDAO
                 $isOpen = $pst->execute();
 
                 $user->photos = $pst->fetchAll();
+                $pst->closeCursor();
+                unset($pst);
 
                 $chat->user = $user;
 
-                $chats[] = $chat;
+                $chats[] = Utils::mapper($chat, new User());
             }
 
             return $chats;

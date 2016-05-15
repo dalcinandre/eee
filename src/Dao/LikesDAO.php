@@ -15,7 +15,7 @@ class LikesDAO
 
     public function get($id, $limit, $offset)
     {
-        $con;
+        /*$con;
         try {
             $con = Conexao::getConexao();
             $pst = $con->prepare(
@@ -75,7 +75,7 @@ class LikesDAO
             throw $err;
         } finally {
             unset($con);
-        }
+        }*/
     }
 
     public function post(Like $like)

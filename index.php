@@ -28,7 +28,7 @@ $app->group('/users', function () use ($app) {
 
   $app->group('/likes', function () use ($app) {
     $app->post('[/]', 'Core\Routes\Likes:post');
-    $app->get('/{id}[/{limit:\d+?}/{offset:\d+?}]', 'Core\Routes\Likes:get');
+    # $app->get('/{id}[/{limit:\d+?}/{offset:\d+?}]', 'Core\Routes\Likes:get');
   });
 
   $app->group('/location', function () use ($app) {

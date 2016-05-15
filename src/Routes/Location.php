@@ -25,7 +25,7 @@ class Location
         try {
             $this->dao->put(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
 
-            return $res->withStatus(200);
+            return $res->withStatus(200)->withJson([]);
         } catch (\Exception $e) {
             throw $e;
         }

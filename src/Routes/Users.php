@@ -75,7 +75,7 @@ class Users
         try {
             $this->dao->delete($req->getAttribute('id'));
 
-            return $res->withStatus(200)->getBody()->write(200);
+            return $res->withStatus(200)->withJson([]);
         } catch (\Exception $e) {
             throw $e;
         }

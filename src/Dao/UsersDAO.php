@@ -41,7 +41,7 @@ class UsersDAO
 
             $users = $pst->fetchAll();
             $pst->closeCursor();
-            unset($pst);
+            $pst = null;
 
             $isOpen = false;
             foreach ($users as $user) {
