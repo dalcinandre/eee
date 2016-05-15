@@ -20,11 +20,11 @@ class Likes
         $this->dao = new LikesDAO();
     }
 
-    public function get(Req $req, Res $res, array $args)
+    public function retrieve(Req $req, Res $res, array $args)
     {
         try {
             return $res->withStatus(200)->withJson(
-              $this->dao->get(
+              $this->dao->retrieve(
                 $req->getAttribute('id'),
                 $req->getAttribute('limit'),
                 $req->getAttribute('offset')
@@ -35,10 +35,10 @@ class Likes
         }
     }
 
-    public function post(Req $req, Res $res, array $args)
+    public function insert(Req $req, Res $res, array $args)
     {
         try {
-            $like = $this->dao->post(Utils::mapper(json_decode($req->getBody()->getContents()), new Like()));
+            $like = $this->dao->insert(Utils::mapper(json_decode($req->getBody()->getContents()), new Like()));
 
             return $res->withStatus(201)->withJson($like)->withHeader('Location', $req->getUri().'/'.$like->id);
         } catch (\Exception $e) {

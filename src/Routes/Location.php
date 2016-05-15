@@ -20,10 +20,10 @@ class Location
         $this->dao = new LocationDAO();
     }
 
-    public function put(Req $req, Res $res, array $args)
+    public function update(Req $req, Res $res, array $args)
     {
         try {
-            $this->dao->put(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
+            $this->dao->update(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
 
             return $res->withStatus(200)->withJson([]);
         } catch (\Exception $e) {

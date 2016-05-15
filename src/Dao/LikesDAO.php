@@ -13,7 +13,7 @@ class LikesDAO
     {
     }
 
-    public function get($id, $limit, $offset)
+    public function retrieve($id, $limit, $offset)
     {
         /*$con;
         try {
@@ -78,7 +78,7 @@ class LikesDAO
         }*/
     }
 
-    public function post(Like $like)
+    public function insert(Like $like)
     {
         $con;
         try {

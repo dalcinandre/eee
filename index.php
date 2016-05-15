@@ -21,25 +21,25 @@ $c['errorHandler'] = function ($c) {
 $app = new \Slim\App($c);
 
 $app->group('/users', function () use ($app) {
-  $app->get('/{id}/{latitude}/{longitude}', 'Core\Routes\Users:get');
-  $app->put('[/]', 'Core\Routes\Users:put');
-  $app->post('[/]', 'Core\Routes\Users:post');
+  $app->get('/{id}/{latitude}/{longitude}', 'Core\Routes\Users:retrieve');
+  $app->put('[/]', 'Core\Routes\Users:update');
+  $app->post('[/]', 'Core\Routes\Users:insert');
   $app->delete('/{id}', 'Core\Routes\Users:delete');
 
   $app->group('/likes', function () use ($app) {
-    $app->post('[/]', 'Core\Routes\Likes:post');
+    $app->post('[/]', 'Core\Routes\Likes:insert');
     # $app->get('/{id}[/{limit:\d+?}/{offset:\d+?}]', 'Core\Routes\Likes:get');
   });
 
   $app->group('/location', function () use ($app) {
-    $app->put('[/]', 'Core\Routes\Location:put');
+    $app->put('[/]', 'Core\Routes\Location:update');
   });
 });
 
 $app->post('/login[/]', 'Core\Routes\Users:login');
 
 $app->group('/chats', function () use ($app) {
-  $app->get('/{idUser}', 'Core\Routes\Chats:get');
+  $app->get('/{idUser}', 'Core\Routes\Chats:retrieve');
   $app->delete('/{id}/{idDislike}', 'Core\Routes\Chats:delete');
 });
 

@@ -14,7 +14,7 @@ class UsersDAO
     {
     }
 
-    public function get($id, $latitude, $longitude)
+    public function retrieve($id, $latitude, $longitude)
     {
         $con;
         try {
@@ -70,7 +70,7 @@ class UsersDAO
         }
     }
 
-    public function post(User $user)
+    public function insert(User $user)
     {
         $con;
         try {
@@ -135,7 +135,7 @@ class UsersDAO
         }
     }
 
-    public function put(User $user)
+    public function update(User $user)
     {
         $con;
         try {
@@ -212,6 +212,8 @@ class UsersDAO
                     default:
                       break;
                   }
+
+                    $photo->status = null;
                 }
 
                 $pstI->closeCursor();

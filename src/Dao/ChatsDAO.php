@@ -4,7 +4,6 @@ namespace Core\Dao;
 
 use Core\Vo\Chat;
 use Core\Vo\User;
-use Core\Utils\Utils;
 
 class ChatsDAO
 {
@@ -12,7 +11,7 @@ class ChatsDAO
     {
     }
 
-    public function get($idUser)
+    public function retrieve($idUser)
     {
         $con = null;
         try {
@@ -71,26 +70,15 @@ class ChatsDAO
                 if (!$pst instanceof \PDOStatement) {
                     $pst = $con->prepare(
                       'SELECT
-                      	a.id_user,
                       	a.photo,
                       	a.perfil,
-                      	b.id_photo
+                      	a.id_photo AS id
                       FROM
                       	users_photos AS a
-                      JOIN
-                      (
-                      	SELECT
-                      		max(a.id_photo) AS id_photo,
-                      		a.id_user
-                      	FROM
-                      		users_photos AS a
-                      	WHERE
-                      		a.perfil IS TRUE
-                      	GROUP BY
-                      		a.id_user
-                      ) b USING (id_user, id_photo)
                       WHERE
-                      	a.id_user = ?;'
+                      	a.id_user = ?
+                      ORDER BY
+                        a.perfil;'
                     );
                 }
 
@@ -104,7 +92,7 @@ class ChatsDAO
 
                 $chat->user = $user;
 
-                $chats[] = Utils::mapper($chat, new User());
+                $chats[] = $chat;
             }
 
             return $chats;

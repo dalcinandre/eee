@@ -18,10 +18,10 @@ class Chats
         $this->dao = new ChatsDAO();
     }
 
-    public function get(Req $req, Res $res, array $args)
+    public function retrieve(Req $req, Res $res, array $args)
     {
         try {
-            return $res->withStatus(200)->withJson($this->dao->get($req->getAttribute('idUser')));
+            return $res->withStatus(200)->withJson($this->dao->retrieve($req->getAttribute('idUser')));
         } catch (\Exception $e) {
             throw $e;
         }

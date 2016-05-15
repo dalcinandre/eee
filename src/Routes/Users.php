@@ -21,11 +21,11 @@ class Users
         $this->dao = new UsersDAO();
     }
 
-    public function get(Req $req, Res $res, array $args)
+    public function retrieve(Req $req, Res $res, array $args)
     {
         try {
             return $res->withStatus(200)->withJson(
-              $this->dao->get(
+              $this->dao->retrieve(
                 $req->getAttribute('id'), $req->getAttribute('latitude'), $req->getAttribute('longitude'))
               );
         } catch (\Exception $e) {
@@ -33,10 +33,10 @@ class Users
         }
     }
 
-    public function put(Req $req, Res $res, array $args)
+    public function update(Req $req, Res $res, array $args)
     {
         try {
-            $user = $this->dao->put(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
+            $user = $this->dao->update(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
 
             return $res->withStatus(200)->withJson($user);
         } catch (\Exception $e) {
@@ -44,10 +44,10 @@ class Users
         }
     }
 
-    public function post(Req $req, Res $res, array $args)
+    public function insert(Req $req, Res $res, array $args)
     {
         try {
-            $user = $this->dao->post(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
+            $user = $this->dao->insert(Utils::mapper(json_decode($req->getBody()->getContents()), new User()));
 
             return $res->withStatus(201)->withJson($user)->withHeader('Location', $req->getUri().'/'.$user->id);
         } catch (\Exception $e) {

@@ -10,7 +10,7 @@ class LocationDAO
     {
     }
 
-    public function put(User $user)
+    public function update(User $user)
     {
         $con;
         try {
