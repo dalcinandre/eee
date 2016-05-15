@@ -18,7 +18,10 @@ class ChatsDAO
             $con = Conexao::getConexao();
             $pst = $con->prepare(
               'SELECT
-              	a.id_chat, a.id_user, b.name, b.last_name
+              	a.id_chat,
+                a.id_user,
+                b.name,
+                b.last_name
               FROM
               (
               	SELECT
@@ -48,8 +51,13 @@ class ChatsDAO
             $pst->bindParam(4, $idUser);
             $pst->execute();
 
+            $ret = $pst->fetchAll();
+            $pst->closeCursor();
+            unset($pst);
             $chats = array();
-            foreach ($pst->fetchAll() as $atual) {
+
+            $isOpen = false;
+            foreach ($ret as $atual) {
                 $chat = new Chat();
                 $chat->id = $atual['id_chat'];
 
@@ -57,6 +65,39 @@ class ChatsDAO
                 $user->id = $atual['id_user'];
                 $user->name = $atual['name'];
                 $user->lastName = $atual['last_name'];
+
+                if (!$pst instanceof \PDOStatement) {
+                    $pst = $con->prepare(
+                      'SELECT
+                      	a.id_user,
+                      	a.photo,
+                      	a.perfil,
+                      	b.id_photo
+                      FROM
+                      	users_photos AS a
+                      JOIN
+                      (
+                      	SELECT
+                      		max(a.id_photo) AS id_photo,
+                      		a.id_user
+                      	FROM
+                      		users_photos AS a
+                      	WHERE
+                      		a.perfil IS TRUE
+                      	GROUP BY
+                      		a.id_user
+                      ) b USING (id_user, id_photo)
+                      WHERE
+                      	a.id_user = ?;'
+                    );
+                }
+
+                $pst->bindParam(1, $user->id);
+                $pst->setFetchMode(\PDO::FETCH_CLASS, '\Core\Vo\Photo');
+                $isOpen = $pst->execute();
+
+                $user->photos = $pst->fetchAll();
+
                 $chat->user = $user;
 
                 $chats[] = $chat;
