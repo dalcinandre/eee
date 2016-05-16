@@ -21,7 +21,7 @@ $c['errorHandler'] = function ($c) {
   return new Core\Utils\Error();
 };
 $app = new \Slim\App($c);
-$app->add(new Interceptor());
+# $app->add(new Interceptor());
 
 $app->group('/users', function () use ($app) {
   $app->get('/{id}/{latitude}/{longitude}', 'Core\Routes\Users:retrieve');
