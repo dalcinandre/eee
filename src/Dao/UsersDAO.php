@@ -45,7 +45,7 @@ class UsersDAO
 
             $isOpen = false;
             foreach ($users as $user) {
-                if (!$pst instanceof \PDOStatement) {
+                if (!($pst instanceof \PDOStatement)) {
                     $pst = $con->prepare('SELECT a.id_photo, a.photo, a.perfil FROM users_photos AS a WHERE a.id_user = ?');
                 }
 

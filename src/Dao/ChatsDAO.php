@@ -67,7 +67,7 @@ class ChatsDAO
                 $user->name = $atual['name'];
                 $user->lastName = $atual['last_name'];
 
-                if (!$pst instanceof \PDOStatement) {
+                if (!($pst instanceof \PDOStatement)) {
                     $pst = $con->prepare(
                       'SELECT
                       	a.photo,

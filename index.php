@@ -1,11 +1,13 @@
 <?php
 
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');
+header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Token, Authorization');
 header('Content-Type: application/json;charset=utf-8');
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 
 require realpath(__DIR__).'/vendor/autoload.php';
+
+use Core\Utils\Interceptor;
 
 $configuration = [
     'settings' => [
@@ -19,6 +21,7 @@ $c['errorHandler'] = function ($c) {
   return new Core\Utils\Error();
 };
 $app = new \Slim\App($c);
+$app->add(new Interceptor());
 
 $app->group('/users', function () use ($app) {
   $app->get('/{id}/{latitude}/{longitude}', 'Core\Routes\Users:retrieve');
@@ -41,10 +44,6 @@ $app->post('/login[/]', 'Core\Routes\Users:login');
 $app->group('/chats', function () use ($app) {
   $app->get('/{idUser}', 'Core\Routes\Chats:retrieve');
   $app->delete('/{id}/{idDislike}', 'Core\Routes\Chats:delete');
-});
-
-$app->get('/ex', function () {
-  throw new \Exception('teste de exception', 500);
 });
 
 $app->run();

@@ -2,18 +2,27 @@
 
 namespace Core\Utils;
 
+use Core\Dao\UsersDAO as Dao;
+use Psr\Http\Message\ServerRequestInterface as Req;
+use Psr\Http\Message\ResponseInterface as Res;
+
 class Interceptor
 {
+    private $con;
+
     public function __construct()
     {
+        $this->con = new Dao();
     }
 
-    public function __invoke($request, $response, $next)
+    public function __invoke(Req $req, Res $res, callable $next)
     {
-        $response->getBody()->write('BEFORE');
-        $response = $next($request, $response);
-        $response->getBody()->write('AFTER');
+        if ($req->hasHeader('Token') /*&& $dao->isValidToken('')*/) {
+            $res = $next($req, $res);
+        } else {
+            $res = $res->withStatus(401);
+        }
 
-        return $response;
+        return $res;
     }
 }
