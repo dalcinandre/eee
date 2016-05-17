@@ -25,7 +25,10 @@ class UsersDAO
               	a.name,
               	a.last_name AS lastName,
               	a.birthday,
-                a.bio
+                a.bio,
+                a.age,
+                a.city,
+                a.state
               FROM
               	get_users(?, ?, ?) AS a
               LIMIT
@@ -52,6 +55,13 @@ class UsersDAO
                 $pst->bindParam(1, $user->id);
                 $pst->setFetchMode(\PDO::FETCH_CLASS, '\Core\Vo\Photo');
                 $isOpen = $pst->execute();
+
+                $user->location = new Location();
+                $user->location->city = $user->city;
+                $user->location->state = $user->state;
+
+                unset($user->city);
+                unset($user->state);
 
                 $user->photos = $pst->fetchAll();
             }

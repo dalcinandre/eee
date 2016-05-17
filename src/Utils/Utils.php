@@ -73,4 +73,29 @@ class Utils
 
         return self::$utils->jsonMapper->map($json, $class);
     }
+
+    public static function getCities($lat, $long)
+    {
+        $file = json_decode(file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?latlng={$lat},{$long}&sensor=true"));
+
+        $saida = [];
+
+        foreach ($file->results[0]->address_components as $address_component) {
+            foreach ($address_component as $dados) {
+                if (is_array($dados)) {
+                    if (array_keys($dados) > 1) {
+                        foreach ($dados as $key => $value) {
+                            if ($value == 'administrative_area_level_2') {
+                                $saida['city'] = $address_component->long_name;
+                            } elseif ($value == 'administrative_area_level_1') {
+                                $saida['state'] = $address_component->short_name;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $saida;
+    }
 }

@@ -4,6 +4,7 @@ namespace Core\Dao;
 
 use Core\Vo\Chat;
 use Core\Vo\User;
+use Core\Vo\Location;
 
 class ChatsDAO
 {
@@ -21,7 +22,12 @@ class ChatsDAO
               	a.id_chat,
                 a.id_user,
                 b.name,
-                b.last_name
+                b.last_name,
+                b.push_id,
+                b.city,
+                b.state,
+                b.bio,
+                (date_part(\'year\', age(CURRENT_DATE, b.birthday))) AS age
               FROM
               (
               	SELECT
@@ -43,13 +49,23 @@ class ChatsDAO
               		c.id_user_a != ? AND c.id_user_b = ?
               ) a
               JOIN
-              	users b USING (id_user);'
+              	users b USING (id_user)
+              ORDER BY
+                a.id_chat DESC;'
             );
             $pst->bindParam(1, $idUser);
             $pst->bindParam(2, $idUser);
             $pst->bindParam(3, $idUser);
             $pst->bindParam(4, $idUser);
             $pst->execute();
+
+            /**
+            * ouvidoria vivo
+            * 0800 775 1212
+            * 20162984363642
+            * ate terca-feira 24-05-2016
+            * André Dalcin
+            */
 
             $ret = $pst->fetchAll();
             $pst->closeCursor();
@@ -65,7 +81,17 @@ class ChatsDAO
                 $user = new User();
                 $user->id = $atual['id_user'];
                 $user->name = $atual['name'];
+                $user->bio = $atual['bio'];
+                $user->age = $atual['age'];
                 $user->lastName = $atual['last_name'];
+                $user->pushId = $atual['push_id'];
+
+                $user->location = new Location();
+                $user->location->city = $user->city;
+                $user->location->state = $user->state;
+
+                unset($user->city);
+                unset($user->state);
 
                 if (!($pst instanceof \PDOStatement)) {
                     $pst = $con->prepare(

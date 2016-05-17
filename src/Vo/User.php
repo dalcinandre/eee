@@ -7,6 +7,11 @@ class User extends Vo
     /**
      * @var string|null
      */
+    public $pushId;
+
+    /**
+     * @var string|null
+     */
     public $name;
 
     /**
